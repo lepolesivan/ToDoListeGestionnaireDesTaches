@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Config\DataBase;
+use PDO;
 
 class Task
 {
@@ -15,14 +16,6 @@ class Task
     protected ?int $point;
     protected ?int $id_user;
 
-    public function addTask(): bool
-    {
-        $pdo = DataBase::getConnection();
-        $sql = "INSERT INTO `task` (`id`, `title`, `content`, `creation_date`, `start_task`, `stop_task`, `point`, `id_user`) VALUES (?,?,?,?,?,?,?,?)";
-        $statement = $pdo->prepare($sql);
-        return $statement->execute([$this->id, $this->title, $this->content, $this->creation_date, $this->start_task, $this->stop_task, $this->point, $this->id_user]);
-    }
-
     public function __construct(?int $id, ?string $title, ?string $content, ?string $creation_date, ?string $start_task, ?string $stop_task, ?int $point, ?int $id_user)
     {
         $this->id = $id;
@@ -33,6 +26,28 @@ class Task
         $this->stop_task = $stop_task;
         $this->point = $point;
         $this->id_user = $id_user;
+    }
+
+    public function unassignedFutureTask()
+    {
+        $pdo = DataBase::getConnection();
+        $sql = "SELECT `task`.`id`, `task`.`title`, `task`.`start_task`, `task`.`stop_task` FROM `todo` RIGHT JOIN `task` ON `todo`.`id_task` = `task`.`id` WHERE `task`.`stop_task` >= CURDATE() AND `todo`.`id_user` IS NULL ORDER BY `task`.`start_task` ASC;";
+        $statement = $pdo->prepare($sql);
+        $statement->execute();
+        $resultFetch = $statement->fetchAll(PDO::FETCH_ASSOC);
+        foreach($resultFetch as $row){
+                $task = new Task($row['id'], $row['title'],null,null, $row['start_task'], $row['stop_task'], null,null);
+                $tasks[] = $task;
+        }
+        return $tasks;
+    }
+
+    public function addTask(): bool
+    {
+        $pdo = DataBase::getConnection();
+        $sql = "INSERT INTO `task` (`id`, `title`, `content`, `creation_date`, `start_task`, `stop_task`, `point`, `id_user`) VALUES (?,?,?,?,?,?,?,?)";
+        $statement = $pdo->prepare($sql);
+        return $statement->execute([$this->id, $this->title, $this->content, $this->creation_date, $this->start_task, $this->stop_task, $this->point, $this->id_user]);
     }
 
     public function getId(): ?int
