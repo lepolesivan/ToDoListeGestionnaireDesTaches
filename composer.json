@@ -1,0 +1,17 @@
+{
+    "name": "edw_2425/to-do-liste-gestionnaire-des-taches",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/",
+			"Config\\": "config/"
+        }
+    },
+    "authors": [
+        {
+            "name": "ivan"
+        }
+    ],
+    "require": {
+        "ext-pdo": "*"
+    }
+}
