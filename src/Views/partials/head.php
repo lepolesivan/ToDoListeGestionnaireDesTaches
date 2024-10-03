@@ -26,7 +26,14 @@
                 <ul class="navbar-nav">
                     <?php
                     if (isset($_SESSION['user'])) {
+                        if ($_SESSION['user']['idRole'] == 1) {
                     ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/addTask">Créer tâche</a>
+                            </li>
+                        <?php
+                        }
+                        ?>
                         <li class="nav-item">
                             <a class="nav-link" href="/logout">Déconnexion</a>
                         </li>
