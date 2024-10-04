@@ -10,8 +10,9 @@ class HomeController extends AbstractController
     public function index()
     {
         if(isset($_SESSION['user']) && $_SESSION['user']['idRole'] == 1){
-            $tasks = new Task(null,null,null,null,null,null,null,null);
+            $tasks = new Task(null,null,null,null,null,null,null,null,null);
             $arrayTasks = $tasks->unassignedFutureTask();
+            $arrayTasksByUsers = $tasks->assignedFutureTask();
         }
         require_once(__DIR__ . '/../Views/home.view.php');
     }
