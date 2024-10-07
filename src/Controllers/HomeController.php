@@ -11,7 +11,7 @@ class HomeController extends AbstractController
     {
         if (isset($_SESSION['user'])) {
 
-            $task = new Task(null, null, null, null, null, null, null, null, null);
+            $task = new Task(null, null, null, null, null, null, null, null, null, null);
             $arrayTasks = $task->unassignedFutureTask();
 
             if ($_SESSION['user']['idRole'] == 1) {
@@ -21,4 +21,3 @@ class HomeController extends AbstractController
         require_once(__DIR__ . '/../Views/home.view.php');
     }
 }
-
